@@ -1,5 +1,4 @@
 import { Scene } from "phaser";
-import { EventBus } from "../EventBus"; // Import the EventBus
 
 export class Preloader extends Scene {
   constructor() {
@@ -7,20 +6,25 @@ export class Preloader extends Scene {
   }
 
   preload() {
-    // Loading assets for your game (if any)
-  }
-
-  create() {
+    // Display a loading message
     this.add
-      .text(400, 300, "Loading...", { font: "32px Arial", fill: "#fff" })
+      .text(400, 300, "Loading...", { fontSize: "32px", color: "#fff" })
       .setOrigin(0.5);
 
-    // Emit event indicating that the Preloader scene is ready
-    EventBus.emit("scene-ready", "Preloader");
+    // Set the asset path
+    this.load.setPath("assets");
 
-    // Transition to the next scene
-    this.time.delayedCall(2000, () => {
-      this.scene.start("GameStart");
+    // Load game assets
+    this.load.image("bg", "bg.png");
+    this.load.image("racket-blue", "racket-blue.png");
+    this.load.image("racket-red", "racket-red.png");
+    this.load.image("ball", "ball.png");
+    this.load.image("net-posts", "net-posts.png");
+    this.load.image("post", "post.png");
+
+    // Load complete handler
+    this.load.on("complete", () => {
+      this.scene.start("Game"); // Switch to Game scene
     });
   }
 }

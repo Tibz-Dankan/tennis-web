@@ -15,7 +15,7 @@ export class GameFinish extends Scene {
       .setOrigin(0.5);
 
     // Emit event indicating that the GameFinish scene is ready
-    EventBus.emit("scene-ready", "GameFinish");
+    EventBus.emit("current-scene-ready", this);
 
     // Restart functionality (example)
     this.input.keyboard.on("keydown-R", () => {

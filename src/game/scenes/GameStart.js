@@ -15,7 +15,7 @@ export class GameStart extends Scene {
       .setOrigin(0.5);
 
     // Emit event indicating that the GameStart scene is ready
-    EventBus.emit("scene-ready", "GameStart");
+    EventBus.emit("current-scene-ready", this);
 
     // Transition to the next scene when Space is pressed
     this.input.keyboard.on("keydown-SPACE", () => {

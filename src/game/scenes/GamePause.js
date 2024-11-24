@@ -15,7 +15,7 @@ export class GamePause extends Scene {
       .setOrigin(0.5);
 
     // Emit event indicating that the GamePause scene is ready
-    EventBus.emit("scene-ready", "GamePause");
+    EventBus.emit("current-scene-ready", this);
 
     // Resume functionality (example)
     this.input.keyboard.on("keydown-P", () => {
