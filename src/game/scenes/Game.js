@@ -4,6 +4,13 @@ export class Game extends Scene {
   constructor() {
     super("Game");
     this.isGameStarted = false;
+
+    // Initialize scores
+    this.humanScore = 0;
+    this.computerScore = 0;
+
+    // Track the last player to hit the ball
+    this.lastHitter = null;
   }
 
   create() {
@@ -27,7 +34,7 @@ export class Game extends Scene {
 
     // Enable physics for the post
     this.physics.world.enable(this.post);
-    this.post.body.setImmovable(true); // Ensure the post doesn't move on collision
+    this.post.body.setImmovable(true);
 
     this.humanRacket = this.add
       .image(centerX - 300, centerY, "racket-blue")
@@ -62,6 +69,21 @@ export class Game extends Scene {
       .on("pointerdown", this.startGame, this);
 
     this.input.setDefaultCursor("pointer");
+
+    // Display scores
+    this.humanScoreText = this.add
+      .text(50, 30, `Player: ${this.humanScore}`, {
+        fontSize: "24px",
+        fill: "#fff",
+      })
+      .setOrigin(0);
+
+    this.computerScoreText = this.add
+      .text(width - 150, 30, `Computer: ${this.computerScore}`, {
+        fontSize: "24px",
+        fill: "#fff",
+      })
+      .setOrigin(0);
   }
 
   startGame() {
@@ -69,6 +91,7 @@ export class Game extends Scene {
     this.isGameStarted = true;
     this.ball.setPosition(this.humanRacket.x + 50, this.humanRacket.y);
     this.ball.body.setVelocity(120, -220);
+    this.lastHitter = "human"; // Human starts with the serve
   }
 
   update() {
@@ -104,6 +127,7 @@ export class Game extends Scene {
       this.sys.game.canvas.width - 50
     );
 
+    // Handle collision with human racket
     if (this.physics.overlap(this.ball, this.humanRacket)) {
       const distanceFromNet = Math.abs(
         this.ball.x - this.sys.game.canvas.width / 2
@@ -118,8 +142,11 @@ export class Game extends Scene {
         horizontalVelocity,
         verticalVelocity - intensity
       );
+
+      this.lastHitter = "human"; // Update last hitter
     }
 
+    // Handle collision with computer racket
     if (this.physics.overlap(this.ball, this.computerRacket)) {
       const distanceFromNet = Math.abs(
         this.ball.x - this.sys.game.canvas.width / 2
@@ -130,23 +157,85 @@ export class Game extends Scene {
       const verticalVelocity = -250 - 150 * (distanceFromNet / maxDistance);
 
       this.ball.body.setVelocity(horizontalVelocity, verticalVelocity);
+
+      this.lastHitter = "computer"; // Update last hitter
     }
 
-    // Ball and post collision handling
+    // Ball hits the post (award point to the opponent)
     if (this.physics.overlap(this.ball, this.post)) {
-      this.endGame();
+      this.handlePostCollision();
     }
 
-    // Out-of-bounds check
+    // Ball falls into player's own boundary (award point to the opponent)
+    if (
+      this.ball.x < this.sys.game.canvas.width / 2 &&
+      this.lastHitter === "human" &&
+      this.ball.y > this.sys.game.canvas.height
+    ) {
+      this.handleOwnBoundaryHit();
+    }
+
+    if (
+      this.ball.x > this.sys.game.canvas.width / 2 &&
+      this.lastHitter === "computer" &&
+      this.ball.y > this.sys.game.canvas.height
+    ) {
+      this.handleOwnBoundaryHit();
+    }
+
+    // Ball out of bounds horizontally (award point to the last hitter)
     if (this.ball.x < 0 || this.ball.x > this.sys.game.canvas.width) {
-      this.resetGame();
+      this.handleOutOfBounds();
     }
   }
 
-  endGame() {
-    this.ball.body.setVelocity(0, 0); // Stop the ball
-    this.isGameStarted = false; // Pause the game
-    this.startButton.setText("Game Over. Restart?").setVisible(true); // Show game over message
+  // Function to handle when the ball falls into the player's own boundary
+  handleOwnBoundaryHit() {
+    // Award point to the opponent (last hitter's opponent)
+    if (this.lastHitter === "human") {
+      this.computerScore++;
+    } else if (this.lastHitter === "computer") {
+      this.humanScore++;
+    }
+
+    // Update score display
+    this.humanScoreText.setText(`Player: ${this.humanScore}`);
+    this.computerScoreText.setText(`Computer: ${this.computerScore}`);
+
+    // Reset game state
+    this.resetGame();
+  }
+
+  handlePostCollision() {
+    // Award point to the opponent (the player who did not hit the ball last)
+    if (this.lastHitter === "human") {
+      this.computerScore++; // Opponent (computer) gets the point
+    } else if (this.lastHitter === "computer") {
+      this.humanScore++; // Opponent (human) gets the point
+    }
+
+    // Update score display
+    this.humanScoreText.setText(`Player: ${this.humanScore}`);
+    this.computerScoreText.setText(`Computer: ${this.computerScore}`);
+
+    // Reset game state
+    this.resetGame();
+  }
+
+  handleOutOfBounds() {
+    // Award point to the last hitter (the player who hit the ball last)
+    if (this.lastHitter === "human") {
+      this.humanScore++; // Player gets the point
+    } else if (this.lastHitter === "computer") {
+      this.computerScore++; // Computer gets the point
+    }
+
+    // Update score display
+    this.humanScoreText.setText(`Player: ${this.humanScore}`);
+    this.computerScoreText.setText(`Computer: ${this.computerScore}`);
+
+    // Reset game state
+    this.resetGame();
   }
 
   resetGame() {
