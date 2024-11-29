@@ -11,6 +11,9 @@ export class Game extends Scene {
 
     // Track the last player to hit the ball
     this.lastHitter = null;
+
+    // Track if gravity has been applied to the ball
+    this.isGravityApplied = false;
   }
 
   create() {
@@ -47,7 +50,7 @@ export class Game extends Scene {
       .setDisplaySize(32, 80);
 
     this.ball = this.add
-      .image(centerX - 250, centerY, "ball")
+      .image(width * 0.2, height * 0.5, "ball")
       .setOrigin(0.5)
       .setDisplaySize(24, 24);
 
@@ -57,7 +60,9 @@ export class Game extends Scene {
       this.computerRacket,
     ]);
 
-    this.ball.body.setGravityY(500);
+    // Ensure ball physics is reset
+    this.ball.body.setGravityY(0);
+    this.ball.body.setVelocity(0, 0); // Clear initial velocity
 
     this.startButton = this.add
       .text(centerX, centerY - 200, "Start Game", {
@@ -89,9 +94,17 @@ export class Game extends Scene {
   startGame() {
     this.startButton.setVisible(false);
     this.isGameStarted = true;
-    this.ball.setPosition(this.humanRacket.x + 50, this.humanRacket.y);
-    this.ball.body.setVelocity(120, -220);
+
+    // Reset ball to initial position and clear physics properties
+    this.ball.setPosition(
+      this.sys.game.canvas.width * 0.2,
+      this.sys.game.canvas.height * 0.5
+    );
+    this.ball.body.setVelocity(0, 0); // Ensure no velocity is applied
+    this.ball.body.setGravityY(0); // Gravity remains disabled
+
     this.lastHitter = "human"; // Human starts with the serve
+    this.isGravityApplied = false; // Reset gravity application state
   }
 
   update() {
@@ -111,24 +124,13 @@ export class Game extends Scene {
     );
     const humanRacketVelocityY = this.humanRacket.y - previousHumanRacketY;
 
-    const maxSpeed = 6;
-    const ballDirectionX = this.ball.x - this.computerRacket.x;
-    const direction = Math.sign(ballDirectionX);
-
-    if (Math.abs(ballDirectionX) > maxSpeed) {
-      this.computerRacket.x += maxSpeed * direction;
-    } else {
-      this.computerRacket.x += ballDirectionX;
-    }
-
-    this.computerRacket.x = Phaser.Math.Clamp(
-      this.computerRacket.x,
-      this.sys.game.canvas.width / 2 + 50,
-      this.sys.game.canvas.width - 50
-    );
-
-    // Handle collision with human racket
+    // Apply gravity only after the ball is hit by the human racket for the first time
     if (this.physics.overlap(this.ball, this.humanRacket)) {
+      if (!this.isGravityApplied) {
+        this.ball.body.setGravityY(500); // Enable gravity
+        this.isGravityApplied = true;
+      }
+
       const distanceFromNet = Math.abs(
         this.ball.x - this.sys.game.canvas.width / 2
       );
@@ -146,6 +148,22 @@ export class Game extends Scene {
       this.lastHitter = "human"; // Update last hitter
     }
 
+    const maxSpeed = 6;
+    const ballDirectionX = this.ball.x - this.computerRacket.x;
+    const direction = Math.sign(ballDirectionX);
+
+    if (Math.abs(ballDirectionX) > maxSpeed) {
+      this.computerRacket.x += maxSpeed * direction;
+    } else {
+      this.computerRacket.x += ballDirectionX;
+    }
+
+    this.computerRacket.x = Phaser.Math.Clamp(
+      this.computerRacket.x,
+      this.sys.game.canvas.width / 2 + 50,
+      this.sys.game.canvas.width - 50
+    );
+
     // Handle collision with computer racket
     if (this.physics.overlap(this.ball, this.computerRacket)) {
       const distanceFromNet = Math.abs(
@@ -161,12 +179,12 @@ export class Game extends Scene {
       this.lastHitter = "computer"; // Update last hitter
     }
 
-    // Ball hits the post (award point to the opponent)
+    // Ball hits the post
     if (this.physics.overlap(this.ball, this.post)) {
       this.handlePostCollision();
     }
 
-    // Ball falls into player's own boundary (award point to the opponent)
+    // Ball falls into own boundary
     if (
       this.ball.x < this.sys.game.canvas.width / 2 &&
       this.lastHitter === "human" &&
@@ -183,68 +201,59 @@ export class Game extends Scene {
       this.handleOwnBoundaryHit();
     }
 
-    // Ball out of bounds horizontally (award point to the last hitter)
+    // Ball out of bounds
     if (this.ball.x < 0 || this.ball.x > this.sys.game.canvas.width) {
       this.handleOutOfBounds();
     }
   }
 
-  // Function to handle when the ball falls into the player's own boundary
   handleOwnBoundaryHit() {
-    // Award point to the opponent (last hitter's opponent)
     if (this.lastHitter === "human") {
       this.computerScore++;
     } else if (this.lastHitter === "computer") {
       this.humanScore++;
     }
 
-    // Update score display
     this.humanScoreText.setText(`Player: ${this.humanScore}`);
     this.computerScoreText.setText(`Computer: ${this.computerScore}`);
 
-    // Reset game state
     this.resetGame();
   }
 
   handlePostCollision() {
-    // Award point to the opponent (the player who did not hit the ball last)
     if (this.lastHitter === "human") {
-      this.computerScore++; // Opponent (computer) gets the point
+      this.computerScore++;
     } else if (this.lastHitter === "computer") {
-      this.humanScore++; // Opponent (human) gets the point
+      this.humanScore++;
     }
 
-    // Update score display
     this.humanScoreText.setText(`Player: ${this.humanScore}`);
     this.computerScoreText.setText(`Computer: ${this.computerScore}`);
 
-    // Reset game state
     this.resetGame();
   }
 
   handleOutOfBounds() {
-    // Award point to the last hitter (the player who hit the ball last)
     if (this.lastHitter === "human") {
-      this.humanScore++; // Player gets the point
+      this.humanScore++;
     } else if (this.lastHitter === "computer") {
-      this.computerScore++; // Computer gets the point
+      this.computerScore++;
     }
 
-    // Update score display
     this.humanScoreText.setText(`Player: ${this.humanScore}`);
     this.computerScoreText.setText(`Computer: ${this.computerScore}`);
 
-    // Reset game state
     this.resetGame();
   }
 
   resetGame() {
     this.ball.setPosition(
-      this.sys.game.canvas.width / 2 - 250,
-      this.sys.game.canvas.height / 2
+      this.sys.game.canvas.width * 0.2,
+      this.sys.game.canvas.height * 0.5
     );
     this.ball.body.setVelocity(0, 0);
-    this.isGameStarted = false;
-    this.startButton.setVisible(true);
+    this.ball.body.setGravityY(0); // Clear gravity
+    this.lastHitter = "human"; // Reset serve
+    this.isGravityApplied = false;
   }
 }
