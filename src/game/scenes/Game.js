@@ -14,6 +14,10 @@ export class Game extends Scene {
 
     // Track if gravity has been applied to the ball
     this.isGravityApplied = false;
+
+    // Store the initial position of the computer racket
+    this.computerInitialX = 0;
+    this.computerInitialY = 0;
   }
 
   create() {
@@ -39,15 +43,21 @@ export class Game extends Scene {
     this.physics.world.enable(this.post);
     this.post.body.setImmovable(true);
 
+    // Set the human racket to 5% width from the left and 50% height
     this.humanRacket = this.add
-      .image(centerX - 300, centerY, "racket-blue")
+      .image(width * 0.05, height * 0.5, "racket-blue")
       .setOrigin(0.5)
       .setDisplaySize(32, 80);
 
+    // Set the computer racket to 95% width from the right and 50% height
     this.computerRacket = this.add
-      .image(centerX + 300, centerY, "racket-red")
+      .image(width * 0.95, height * 0.5, "racket-red")
       .setOrigin(0.5)
       .setDisplaySize(32, 80);
+
+    // Store the initial position of the computer racket
+    this.computerInitialX = this.computerRacket.x;
+    this.computerInitialY = this.computerRacket.y;
 
     this.ball = this.add
       .image(width * 0.2, height * 0.5, "ball")
@@ -152,20 +162,32 @@ export class Game extends Scene {
     const ballDirectionX = this.ball.x - this.computerRacket.x;
     const direction = Math.sign(ballDirectionX);
 
-    if (Math.abs(ballDirectionX) > maxSpeed) {
-      this.computerRacket.x += maxSpeed * direction;
-    } else {
-      this.computerRacket.x += ballDirectionX;
+    // Condition: Start moving the computer racket when the ball is at 45% width from the left and moving towards the computer side
+    if (
+      this.ball.x > this.sys.game.canvas.width * 0.45 && // Ball is near 45% width from the left side
+      this.ball.body.velocity.x > 0 // Ball is moving towards the computer side
+    ) {
+      // The computer racket should follow the ball towards its side
+      if (Math.abs(ballDirectionX) > maxSpeed) {
+        this.computerRacket.x += maxSpeed * direction;
+      } else {
+        this.computerRacket.x += ballDirectionX;
+      }
+
+      // Ensure the computer racket stays within its boundary
+      this.computerRacket.x = Phaser.Math.Clamp(
+        this.computerRacket.x,
+        this.sys.game.canvas.width / 2 + 50,
+        this.sys.game.canvas.width - 50
+      );
     }
 
-    this.computerRacket.x = Phaser.Math.Clamp(
-      this.computerRacket.x,
-      this.sys.game.canvas.width / 2 + 50,
-      this.sys.game.canvas.width - 50
-    );
-
-    // Handle collision with computer racket
+    // After hitting the ball, move the racket back to its initial position
     if (this.physics.overlap(this.ball, this.computerRacket)) {
+      // Move the computer racket back to its initial position
+      this.computerRacket.x = this.computerInitialX;
+      this.computerRacket.y = this.computerInitialY;
+
       const distanceFromNet = Math.abs(
         this.ball.x - this.sys.game.canvas.width / 2
       );
@@ -221,9 +243,9 @@ export class Game extends Scene {
   }
 
   handlePostCollision() {
-    if (this.lastHitter === "human") {
+    if (this.ball.x < this.sys.game.canvas.width / 2) {
       this.computerScore++;
-    } else if (this.lastHitter === "computer") {
+    } else {
       this.humanScore++;
     }
 
@@ -234,10 +256,10 @@ export class Game extends Scene {
   }
 
   handleOutOfBounds() {
-    if (this.lastHitter === "human") {
-      this.humanScore++;
-    } else if (this.lastHitter === "computer") {
+    if (this.ball.x < 0) {
       this.computerScore++;
+    } else {
+      this.humanScore++;
     }
 
     this.humanScoreText.setText(`Player: ${this.humanScore}`);
@@ -251,9 +273,21 @@ export class Game extends Scene {
       this.sys.game.canvas.width * 0.2,
       this.sys.game.canvas.height * 0.5
     );
-    this.ball.body.setVelocity(0, 0);
-    this.ball.body.setGravityY(0); // Clear gravity
-    this.lastHitter = "human"; // Reset serve
-    this.isGravityApplied = false;
+    this.ball.body.setVelocity(0, 0); // Reset ball velocity
+    this.ball.body.setGravityY(0); // Reset gravity
+
+    // Reset rackets to their starting positions
+    this.humanRacket.setPosition(
+      this.sys.game.canvas.width * 0.05,
+      this.sys.game.canvas.height * 0.5
+    );
+    this.computerRacket.setPosition(
+      this.computerInitialX,
+      this.computerInitialY
+    );
+
+    // Reset last hitter
+    this.startButton.setVisible(true);
+    this.isGameStarted = false;
   }
 }
