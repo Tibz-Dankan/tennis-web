@@ -5,7 +5,6 @@ import { Game } from "./scenes/Game";
 
 export function PhaserGame() {
   useLayoutEffect(() => {
-    // Calculate 80% of the window dimensions
     const width = window.innerWidth * 0.8;
     const height = window.innerHeight * 0.8;
 
@@ -15,11 +14,6 @@ export function PhaserGame() {
       height,
       parent: "game-container",
       scene: [Preloader, Game],
-      // scale: {
-      //   mode: Phaser.Scale.FIT, // Ensures the game fits the container
-      //   // autoCenter: Phaser.Scale.CENTER_BOTH,
-      //   zoom: 1, // Set zoom to 1 to avoid any zoom animation
-      // },
       physics: {
         default: "arcade",
         arcade: {
