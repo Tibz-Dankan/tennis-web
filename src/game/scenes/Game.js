@@ -100,6 +100,12 @@ export class Game extends Scene {
         fill: "#fff",
       })
       .setOrigin(0);
+
+    EventBus.on("startGame", (start) => {
+      if (!start) return;
+      console.log("To start the game event trigger:", start);
+      this.startGame();
+    });
   }
 
   startGame() {
