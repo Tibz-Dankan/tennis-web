@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import { EventBus } from "../EventBus";
 
 export class Game extends Scene {
   constructor() {
@@ -232,8 +233,10 @@ export class Game extends Scene {
   handleOwnBoundaryHit() {
     if (this.lastHitter === "human") {
       this.computerScore++;
+      EventBus.emit("computerScore", this.computerScore);
     } else if (this.lastHitter === "computer") {
       this.humanScore++;
+      EventBus.emit("humanScore", this.humanScore);
     }
 
     this.humanScoreText.setText(`Player: ${this.humanScore}`);
@@ -245,8 +248,10 @@ export class Game extends Scene {
   handlePostCollision() {
     if (this.ball.x < this.sys.game.canvas.width / 2) {
       this.computerScore++;
+      EventBus.emit("computerScore", this.computerScore);
     } else {
       this.humanScore++;
+      EventBus.emit("humanScore", this.humanScore);
     }
 
     this.humanScoreText.setText(`Player: ${this.humanScore}`);
@@ -258,8 +263,10 @@ export class Game extends Scene {
   handleOutOfBounds() {
     if (this.ball.x < 0) {
       this.computerScore++;
+      EventBus.emit("computerScore", this.computerScore);
     } else {
       this.humanScore++;
+      EventBus.emit("humanScore", this.humanScore);
     }
 
     this.humanScoreText.setText(`Player: ${this.humanScore}`);
