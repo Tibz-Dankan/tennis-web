@@ -1,12 +1,9 @@
 import React from "react";
-import { EventScoreBridge } from "./EventScoreBridge";
-import { EventGameControlsBridget } from "./EventGameControlsBridget";
+import { useEventScoreBridge } from "./useEventScoreBridge";
+import { useEventGameControlsBridget } from "./useEventGameControlsBridget";
 
 export const EventBridge = () => {
-  return (
-    <div>
-      <EventScoreBridge />
-      <EventGameControlsBridget />
-    </div>
-  );
+  useEventScoreBridge();
+  useEventGameControlsBridget();
+  return <div></div>;
 };
