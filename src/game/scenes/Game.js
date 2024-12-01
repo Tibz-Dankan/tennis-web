@@ -29,14 +29,7 @@ export class Game extends Scene {
     const borderRadius = 24;
 
     const maskGraphics = this.add.graphics();
-    maskGraphics.fillStyle(0xffffff, 1);
-    maskGraphics.fillRoundedRect(0, 0, width, height, borderRadius);
-
-    const bg = this.add
-      .image(centerX, centerY, "bg")
-      .setOrigin(0.5)
-      .setDisplaySize(width, height);
-    bg.setMask(maskGraphics.createGeometryMask());
+    maskGraphics.fillRoundedRect(0, 0, width, height);
 
     this.post = this.add.image(centerX, topY, "post").setOrigin(0.5);
 
@@ -75,28 +68,16 @@ export class Game extends Scene {
     this.ball.body.setGravityY(0);
     this.ball.body.setVelocity(0, 0); // Clear initial velocity
 
-    this.startButton = this.add
-      .text(centerX, centerY - 200, "Start Game", {
-        fontSize: "32px",
-        fill: "#fff",
-      })
-      .setOrigin(0.5)
-      .setInteractive()
-      .on("pointerdown", this.startGame, this);
-
-    this.input.setDefaultCursor("pointer");
-
-    // Display scores
     this.humanScoreText = this.add
-      .text(50, 30, `Player: ${this.humanScore}`, {
-        fontSize: "24px",
+      .text(width * 0.03, height * 0.03, `You`, {
+        fontSize: "20px",
         fill: "#fff",
       })
       .setOrigin(0);
 
     this.computerScoreText = this.add
-      .text(width - 150, 30, `Computer: ${this.computerScore}`, {
-        fontSize: "24px",
+      .text(width - 116, height * 0.03, `Computer`, {
+        fontSize: "20px",
         fill: "#fff",
       })
       .setOrigin(0);
@@ -109,7 +90,7 @@ export class Game extends Scene {
   }
 
   startGame() {
-    this.startButton.setVisible(false);
+    // this.startButton.setVisible(false);
     this.isGameStarted = true;
 
     // Reset ball to initial position and clear physics properties
@@ -247,10 +228,6 @@ export class Game extends Scene {
       EventBus.emit("humanScore", this.humanScore);
       EventBus.emit("winner", "human");
     }
-
-    this.humanScoreText.setText(`Player: ${this.humanScore}`);
-    this.computerScoreText.setText(`Computer: ${this.computerScore}`);
-
     this.resetGame();
   }
 
@@ -264,10 +241,6 @@ export class Game extends Scene {
       EventBus.emit("humanScore", this.humanScore);
       EventBus.emit("winner", "human");
     }
-
-    this.humanScoreText.setText(`Player: ${this.humanScore}`);
-    this.computerScoreText.setText(`Computer: ${this.computerScore}`);
-
     this.resetGame();
   }
 
@@ -281,10 +254,6 @@ export class Game extends Scene {
       EventBus.emit("humanScore", this.humanScore);
       EventBus.emit("winner", "human");
     }
-
-    this.humanScoreText.setText(`Player: ${this.humanScore}`);
-    this.computerScoreText.setText(`Computer: ${this.computerScore}`);
-
     this.resetGame();
   }
 
@@ -307,7 +276,7 @@ export class Game extends Scene {
     );
 
     // Reset last hitter
-    this.startButton.setVisible(true);
+    // this.startButton.setVisible(true);
     this.isGameStarted = false;
   }
 }

@@ -1,7 +1,6 @@
 import React from "react";
 import { PhaserGame } from "./game/PhaserGame";
 import { EventBridge } from "./game/bridge/EventBridge";
-import { GameControls } from "./game/controls/GameControls";
 import { GameStatistics } from "./game/statistics/GameStatistics";
 import "./app.css";
 
@@ -14,7 +13,6 @@ export const App = () => {
       <EventBridge />
       <GameStatistics />
       <PhaserGame />
-      <GameControls />
     </div>
   );
 };

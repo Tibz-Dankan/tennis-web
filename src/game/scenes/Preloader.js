@@ -6,9 +6,14 @@ export class Preloader extends Scene {
   }
 
   preload() {
+    const { width, height } = this.sys.game.canvas;
+
+    const centerX = width / 2;
+    const centerY = height / 2;
+
     // Display a loading message
     this.add
-      .text(400, 300, "Loading...", { fontSize: "32px", color: "#fff" })
+      .text(centerX, centerY, "Loading...", { fontSize: "32px", color: "#fff" })
       .setOrigin(0.5);
 
     // Set the asset path
