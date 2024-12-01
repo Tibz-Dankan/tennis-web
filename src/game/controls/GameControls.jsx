@@ -1,10 +1,12 @@
 import React from "react";
 import { StartGame } from "./StartGame";
+// import { useControlsStore } from "../../store/controls";
+import { useScoreStore } from "../../store/score";
 
 export const GameControls = () => {
-  return (
-    <div>
-      <StartGame />
-    </div>
-  );
+  const winner = useScoreStore((state) => state.winner);
+
+  const showStartGameBtn = winner !== "pending";
+
+  return <div>{showStartGameBtn && <StartGame />}</div>;
 };

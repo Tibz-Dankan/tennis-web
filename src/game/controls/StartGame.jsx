@@ -18,7 +18,7 @@ export const StartGame = () => {
       <button
         onClick={() => startGameHandler()}
         className="bg-indigo-400  px-4 py-2 rounded-md disabled:opacity-50
-        flex items-center justify-center gap-2 transition-all"
+        flex items-center justify-center gap-2 transition-all cursor-pointer"
         disabled={disablePlayBtn}
       >
         <span>

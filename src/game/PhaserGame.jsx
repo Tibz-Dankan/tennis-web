@@ -3,6 +3,7 @@ import Phaser from "phaser";
 import { Preloader } from "./scenes/Preloader";
 import { Game } from "./scenes/Game";
 import { GameControls } from "./controls/GameControls";
+import { GameTimer } from "./statistics/GameTimer";
 
 export function PhaserGame() {
   useLayoutEffect(() => {
@@ -50,7 +51,10 @@ export function PhaserGame() {
   }, []);
 
   return (
-    <div id="game-container" className="bg-green-500s relative">
+    <div id="game-container" className="bg-green-500s relative mt-10s">
+      <div className="flex items-center justify-center my-6">
+        <GameTimer />
+      </div>
       <div class="absolute bottom-4 right-4">
         <GameControls />
       </div>

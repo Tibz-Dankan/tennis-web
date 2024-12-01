@@ -278,5 +278,6 @@ export class Game extends Scene {
     // Reset last hitter
     // this.startButton.setVisible(true);
     this.isGameStarted = false;
+    EventBus.emit("startGame", this.isGameStarted);
   }
 }
