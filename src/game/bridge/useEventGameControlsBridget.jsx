@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useControlsStore } from "../../store/controls";
 import { EventBus } from "../EventBus";
 
-export const EventGameControlsBridget = () => {
+export const useEventGameControlsBridget = () => {
   const isGameStart = useControlsStore((state) => state.start);
   const isGamePause = useControlsStore((state) => state.pause);
   const resetGame = useControlsStore((state) => state.resetGame);
@@ -23,5 +23,5 @@ export const EventGameControlsBridget = () => {
     return () => resetGame();
   }, [isGameStart, isGamePause]);
 
-  return <div>EventGameControlsBridget</div>;
+  return {};
 };

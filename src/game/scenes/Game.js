@@ -122,6 +122,7 @@ export class Game extends Scene {
 
     this.lastHitter = "human"; // Human starts with the serve
     this.isGravityApplied = false; // Reset gravity application state
+    EventBus.emit("winner", "pending");
   }
 
   update() {
@@ -240,9 +241,11 @@ export class Game extends Scene {
     if (this.lastHitter === "human") {
       this.computerScore++;
       EventBus.emit("computerScore", this.computerScore);
+      EventBus.emit("winner", "computer");
     } else if (this.lastHitter === "computer") {
       this.humanScore++;
       EventBus.emit("humanScore", this.humanScore);
+      EventBus.emit("winner", "human");
     }
 
     this.humanScoreText.setText(`Player: ${this.humanScore}`);
@@ -255,9 +258,11 @@ export class Game extends Scene {
     if (this.ball.x < this.sys.game.canvas.width / 2) {
       this.computerScore++;
       EventBus.emit("computerScore", this.computerScore);
+      EventBus.emit("winner", "computer");
     } else {
       this.humanScore++;
       EventBus.emit("humanScore", this.humanScore);
+      EventBus.emit("winner", "human");
     }
 
     this.humanScoreText.setText(`Player: ${this.humanScore}`);
@@ -270,9 +275,11 @@ export class Game extends Scene {
     if (this.ball.x < 0) {
       this.computerScore++;
       EventBus.emit("computerScore", this.computerScore);
+      EventBus.emit("winner", "computer");
     } else {
       this.humanScore++;
       EventBus.emit("humanScore", this.humanScore);
+      EventBus.emit("winner", "human");
     }
 
     this.humanScoreText.setText(`Player: ${this.humanScore}`);
