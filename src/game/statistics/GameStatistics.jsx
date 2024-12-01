@@ -1,6 +1,7 @@
 import React from "react";
 import { Score } from "./Score";
 import { useScoreStore } from "../../store/score";
+import { CrownIcon } from "../../icons/CrownIcon";
 
 export const GameStatistics = () => {
   const scoreWinner = useScoreStore((state) => state.winner);
@@ -51,13 +52,6 @@ export const GameStatistics = () => {
      ${red900}, ${red700}, ${gray700},${gray700},${gray500})`,
   };
 
-  const getGameStatus = () => {
-    if (!scoreWinner) return "Tennis";
-    if (scoreWinner === "pending") return "in progress";
-    if (scoreWinner === "human") return "won";
-    if (scoreWinner === "computer") return "lost";
-  };
-
   const getBgColor = () => {
     if (!scoreWinner || scoreWinner === "pending") return defaultBgColor;
     if (scoreWinner === "human") return wonBgColor;
@@ -71,9 +65,7 @@ export const GameStatistics = () => {
       style={getBgColor()}
     >
       <div>
-        <span className="font-extrabold text-3xl uppercase">
-          {getGameStatus()}
-        </span>
+        <GetGameStatus scoreWinner={scoreWinner} />
       </div>
       <div>Real time stats Transfer</div>
       <div>
@@ -81,4 +73,26 @@ export const GameStatistics = () => {
       </div>
     </div>
   );
+};
+
+const GetGameStatus = ({ scoreWinner }) => {
+  if (!scoreWinner) {
+    return <span className="font-extrabold text-3xl uppercase">Tennis</span>;
+  }
+  if (scoreWinner === "pending") {
+    return (
+      <span className="font-extrabold text-3xl uppercase">in progress</span>
+    );
+  }
+  if (scoreWinner === "human") {
+    return (
+      <div className="flex items-center gap-2 justify-center">
+        <CrownIcon />
+        <span className="font-extrabold text-3xl uppercase">won</span>
+      </div>
+    );
+  }
+  if (scoreWinner === "computer") {
+    return <span className="font-extrabold text-3xl uppercase">lost</span>;
+  }
 };
