@@ -24,3 +24,49 @@ canvas {
   margin-right: auto; /* Optional: Center the canvas horizontally */
   background-color: #495057;
 }
+
+/* @keyframes moveToWallet1 {
+  0% {
+    transform: translate(100%, 0);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(50%, -30%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes moveToWallet2 {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(50%, -30%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(100%, 0);
+    opacity: 0;
+  }
+}
+
+.move-to-wallet-1 {
+  animation: moveToWallet1 1.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.move-to-wallet-2 {
+  animation: moveToWallet2 1.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.hidden {
+  display: none;
+}
+
+.visible {
+  display: block;
+} */
