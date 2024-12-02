@@ -2,6 +2,7 @@ import React from "react";
 import { Score } from "./Score";
 import { useScoreStore } from "../../store/score";
 import { CrownIcon } from "../../icons/CrownIcon";
+import { WalletTransfer } from "./WalletTransfer";
 
 export const GameStatistics = () => {
   const scoreWinner = useScoreStore((state) => state.winner);
@@ -67,7 +68,10 @@ export const GameStatistics = () => {
       <div>
         <GetGameStatus scoreWinner={scoreWinner} />
       </div>
-      <div>Real time stats Transfer</div>
+      {/* <div>Real time stats Transfer</div> */}
+      <div>
+        <WalletTransfer />
+      </div>
       <div>
         <Score />
       </div>
