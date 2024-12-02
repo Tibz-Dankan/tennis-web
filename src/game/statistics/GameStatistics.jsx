@@ -65,10 +65,9 @@ export const GameStatistics = () => {
       py-4 transition-all shadow-lg"
       style={getBgColor()}
     >
-      <div>
+      <div className="w-52">
         <GetGameStatus scoreWinner={scoreWinner} />
       </div>
-      {/* <div>Real time stats Transfer</div> */}
       <div>
         <WalletTransfer />
       </div>
