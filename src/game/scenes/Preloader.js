@@ -26,6 +26,7 @@ export class Preloader extends Scene {
     this.load.image("ball", "ball.png");
     this.load.image("net-posts", "net-posts.png");
     this.load.image("post", "post.png");
+    this.load.audio("hitSound", "hit-sound.mp3");
 
     // Load complete handler
     this.load.on("complete", () => {
