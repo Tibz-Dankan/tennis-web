@@ -68,9 +68,9 @@ export const CrownIcon = (props) => {
       <path
         fill="none"
         stroke="#f19534"
-        stroke-linecap="round"
-        stroke-miterlimit="10"
-        stroke-width="4"
+        strokeLinecap="round"
+        strokeMiterlimit="10"
+        strokeWidth="4"
         d="M109.15 100.23s-16.57 9.38-45.1 9.38s-45.1-9.38-45.1-9.38"
       />
       <path
