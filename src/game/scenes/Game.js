@@ -68,6 +68,9 @@ export class Game extends Scene {
     this.ball.body.setGravityY(0);
     this.ball.body.setVelocity(0, 0); // Clear initial velocity
 
+    // Add the hit sound
+    this.hitSound = this.sound.add("hitSound");
+
     this.humanScoreText = this.add
       .text(width * 0.03, height * 0.03, `You`, {
         fontSize: "20px",
@@ -125,6 +128,7 @@ export class Game extends Scene {
 
     // Apply gravity only after the ball is hit by the human racket for the first time
     if (this.physics.overlap(this.ball, this.humanRacket)) {
+      this.hitSound.play(); // Play hit sound
       if (!this.isGravityApplied) {
         this.ball.body.setGravityY(500); // Enable gravity
         this.isGravityApplied = true;
@@ -173,6 +177,7 @@ export class Game extends Scene {
 
     // After hitting the ball, move the racket back to its initial position
     if (this.physics.overlap(this.ball, this.computerRacket)) {
+      this.hitSound.play(); // Play hit sound
       // Move the computer racket back to its initial position
       this.computerRacket.x = this.computerInitialX;
       this.computerRacket.y = this.computerInitialY;
@@ -192,6 +197,7 @@ export class Game extends Scene {
 
     // Ball hits the post
     if (this.physics.overlap(this.ball, this.post)) {
+      this.hitSound.play(); // Play hit sound
       this.handlePostCollision();
     }
 
