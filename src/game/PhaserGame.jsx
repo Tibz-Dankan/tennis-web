@@ -51,7 +51,7 @@ export function PhaserGame() {
   }, []);
 
   return (
-    <div id="game-container" className="bg-green-500s relative mt-10s">
+    <div id="game-container" className="relative">
       <div className="flex items-center justify-center my-6">
         <GameTimer />
       </div>
