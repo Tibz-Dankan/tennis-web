@@ -64,14 +64,14 @@ export const WalletTransfer = () => {
   return (
     <div
       ref={parentRef}
-      className="w-full border-4 border-gray-300 rounded-xl p-3 
+      className="w-full max-w-96 border-4 border-gray-300 rounded-xl p-3s 
       flex items-center justify-between gap-16 relative"
     >
       {/* Wallet 1 */}
       <div
         ref={wallet1Ref}
         className="flex items-center justify-between gap-2
-          text-gray-300 bg-[rgba(77,171,247,0.2)] px-4 py-3
+          text-gray-300  bg-indigo-400 px-4 py-2
           rounded-lg relative"
         id="wallet-1"
       >
@@ -94,7 +94,7 @@ export const WalletTransfer = () => {
       <div
         ref={wallet2Ref}
         className="flex items-center justify-between gap-2
-        text-gray-300 bg-[rgba(77,171,247,0.2)] px-4 py-3
+        text-gray-300 bg-indigo-400 px-4 py-2
         rounded-lg relative"
         id="wallet-2"
       >

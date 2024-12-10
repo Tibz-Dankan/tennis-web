@@ -4,6 +4,7 @@ import { Preloader } from "./scenes/Preloader";
 import { Game } from "./scenes/Game";
 import { GameControls } from "./controls/GameControls";
 import { GameTimer } from "./statistics/GameTimer";
+import { WalletTransfer } from "./statistics/WalletTransfer";
 
 export function PhaserGame() {
   useLayoutEffect(() => {
@@ -52,7 +53,8 @@ export function PhaserGame() {
 
   return (
     <div id="game-container" className="relative">
-      <div className="flex items-center justify-center my-6">
+      <div className="flex items-center justify-between my-6 gap-16">
+        <WalletTransfer />
         <GameTimer />
       </div>
       <div class="absolute bottom-4 right-4">
