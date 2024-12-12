@@ -20,7 +20,7 @@ export class Preloader extends Scene {
     this.load.setPath("assets");
 
     // Load game assets
-    this.load.image("bg", "bg.png");
+    this.load.image("stadium-bg", "stadium-bg.png");
     this.load.image("racket-blue", "racket-blue.png");
     this.load.image("racket-red", "racket-red.png");
     this.load.image("ball", "ball.png");
