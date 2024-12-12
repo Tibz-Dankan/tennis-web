@@ -31,6 +31,12 @@ export class Game extends Scene {
     const maskGraphics = this.add.graphics();
     maskGraphics.fillRoundedRect(0, 0, width, height);
 
+    // Add the stadium background image
+    this.add
+      .image(centerX, centerY, "stadium-bg")
+      .setOrigin(0.5)
+      .setDisplaySize(width, height); // Stretch the background to fit the canvas
+
     this.post = this.add.image(centerX, topY, "post").setOrigin(0.5);
 
     // Enable physics for the post
@@ -74,14 +80,28 @@ export class Game extends Scene {
     this.humanScoreText = this.add
       .text(width * 0.03, height * 0.03, `You`, {
         fontSize: "20px",
-        fill: "#fff",
+        fill: "#343a40",
+        backgroundColor: "#fff",
+        padding: {
+          left: 5,
+          right: 5,
+          top: 5,
+          bottom: 5,
+        },
       })
       .setOrigin(0);
 
     this.computerScoreText = this.add
       .text(width - 116, height * 0.03, `Computer`, {
         fontSize: "20px",
-        fill: "#fff",
+        fill: "#343a40",
+        backgroundColor: "#fff",
+        padding: {
+          left: 5,
+          right: 5,
+          top: 5,
+          bottom: 5,
+        },
       })
       .setOrigin(0);
 
