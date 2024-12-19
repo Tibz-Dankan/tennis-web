@@ -4,7 +4,6 @@ import { useScoreStore } from "../../store/score";
 import { CrownIcon } from "../../icons/CrownIcon";
 import { WalletTransfer } from "./WalletTransfer";
 import { Transaction } from "../../transactions/Transaction";
-import { TransactionWrapper } from "../../transactions/TransactionWrapper";
 
 export const GameStatistics = () => {
   const scoreWinner = useScoreStore((state) => state.winner);
@@ -72,9 +71,7 @@ export const GameStatistics = () => {
       </div>
       <div>
         {/* <WalletTransfer /> */}
-        {/* <Transaction /> */}
-        <TransactionWrapper />
-        {/* TransactionWrapper */}
+        <Transaction />
       </div>
       <div>
         <Score />
