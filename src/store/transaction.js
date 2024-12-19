@@ -5,12 +5,13 @@ export const useTransactionStore = create(
   immer((set) => ({
     isTransacting: false,
     transactions: {},
-    fistTransaction: {},
     updateIsTransacting: (isTransacting) =>
       set(() => ({ isTransacting: isTransacting })),
     updateTransactions: (transactions) =>
       set(() => ({ transactions: transactions })),
-    updateFirstTransaction: (transaction) =>
-      set(() => ({ fistTransaction: transaction })),
+    updateFirstTransaction: (transaction) => {
+      const clonedTransaction = structuredClone(transaction);
+      return set(() => ({ fistTransaction: clonedTransaction }));
+    },
   }))
 );

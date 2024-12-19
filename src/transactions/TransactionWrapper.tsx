@@ -22,6 +22,7 @@ export const TransactionWrapper = () => {
       if (!data) return;
       updateTransactions(data);
       updateFirstTransaction(data?.edges[0]);
+      // updateFirstTransaction(JSON.stringify(data?.edges[0]));
     };
     updateTransactionHandler();
   }, [data]);
