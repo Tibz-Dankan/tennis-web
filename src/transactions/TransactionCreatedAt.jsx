@@ -6,7 +6,7 @@ export const TransactionCreatedAt = ({ createdAt }) => {
     elapsedTime(parseInt(createdAt))
   );
 
-  const updateElapsedTime = () => {
+  const updateElapsedTime = (createdAt) => {
     if (!createdAt) return;
     setElapseTime(() => elapsedTime(parseInt(createdAt)));
   };
@@ -15,19 +15,25 @@ export const TransactionCreatedAt = ({ createdAt }) => {
   // start of every minute and after
   // every 30 seconds
   useEffect(() => {
+    // Run when ever createdAt changes
+    updateElapsedTime(createdAt);
     const now = new Date();
     const delayToNextMinute =
       (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
 
+    // Run at the start of every minute
     const initialTimeoutId = setTimeout(() => {
-      updateElapsedTime();
-      const intervalId = setInterval(updateElapsedTime, 30000);
+      updateElapsedTime(createdAt);
+      // Run after every 30 seconds
+      const intervalId = setInterval(() => {
+        updateElapsedTime(createdAt);
+      }, 30000);
 
       return () => clearInterval(intervalId);
     }, delayToNextMinute);
 
     return () => clearTimeout(initialTimeoutId);
-  }, [elapseTime, setElapseTime]);
+  }, [createdAt, elapseTime, setElapseTime]);
 
   return (
     <div>

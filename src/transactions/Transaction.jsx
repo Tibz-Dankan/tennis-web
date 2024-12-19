@@ -10,6 +10,9 @@ import { ChevronDownIcon } from "../icons/ChevronDownIcon";
 
 export const Transaction = () => {
   const isTransacting = useTransactionStore((state) => state.isTransacting);
+  // const lastTransaction = JSON.parse(
+  //   useTransactionStore((state) => state.fistTransaction)
+  // );
   const lastTransaction = useTransactionStore((state) => state.fistTransaction);
 
   // const updateTransactions = useTransactionStore(
@@ -29,33 +32,9 @@ export const Transaction = () => {
   const transaction = hasTransaction && transactions[0];
   // const transaction = hasTransaction
   // const transaction = transactions[0];
-  console.log("transaction:", transaction);
+  // console.log("transaction:", transaction);
 
-  useEffect(() => {}, [isTransacting]);
-
-  // if (isPending) {
-  //   return (
-  //     <div
-  //       className="w-full h-10 flex items-center justify-center
-  //        bg-gray-200 rounded-md px-4"
-  //     >
-  //       <span className="text-lg text-gray-700">Loading...</span>
-  //     </div>
-  //   );
-  // }
-
-  // if (isError) {
-  //   return (
-  //     <div
-  //       className="w-full h-10 flex items-center justify-center
-  //      bg-gray-200 rounded-md px-4"
-  //     >
-  //       <div className="text-red-500">
-  //         <span>Error fetching Transactions</span>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  // useEffect(() => {}, [isTransacting]);
 
   return (
     <div className="w-full">
@@ -69,7 +48,6 @@ export const Transaction = () => {
               className="w-48 h-10 flex items-center justify-center 
                transition-all"
             >
-              {/* {!isTransacting ? ( */}
               {isTransacting ? (
                 <Loader className="text-blue-500" />
               ) : (

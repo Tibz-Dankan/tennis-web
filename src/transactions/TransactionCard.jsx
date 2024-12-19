@@ -1,6 +1,5 @@
 import React from "react";
 import { FlashIcon } from "../icons/FlashIcon";
-// import { elapsedTime } from "../utils/elapsedTime";
 import { TransactionCreatedAt } from "./TransactionCreatedAt";
 
 export const TransactionCard = (props) => {
